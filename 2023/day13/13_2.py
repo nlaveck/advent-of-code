@@ -9,8 +9,9 @@ def print_row(pattern, reflection):
 
 
 
-def row(pattern, reflection=-1, smudge=False):
+def row(pattern, reflection=-1, has_smudge=False):
     for i in range(1, len(pattern)):
+        smudge = has_smudge
         if i == reflection: continue
         stop = False
         for offset in range(0, min(i, len(pattern)-i)):
@@ -27,10 +28,11 @@ def row(pattern, reflection=-1, smudge=False):
         if not stop:
             # done
             return i
-    return -1
+    return 0
 
-def column(pattern, reflection=-1, smudge=False):
+def column(pattern, reflection=-1, has_smudge=False):
     for j in range(1,len(pattern[0])):
+        smudge = has_smudge
         if j == reflection: continue
         stop = False
         for offset in range(0, min(j, len(pattern[0])-j)):
@@ -45,28 +47,15 @@ def column(pattern, reflection=-1, smudge=False):
                 break
         if not stop:
             # done
-            #print(j)
             return j 
-    return -1
-
-def solve(pattern):
-    score = None
-    c = column(pattern)
-    r = row(pattern)
-    c2 = column(pattern, c, True)
-    c3 = column(pattern, smudge=True)
-    r2 = row(pattern, r, True)
-    r3 = row(pattern, smudge=True)
-    print(c2, r2, c3, r3)
     return 0
 
-def solve2(pattern):
-    if (col := column(pattern)) > 0:
-        print(col)
-        return col
+def solve(pattern):
+    if c := column(pattern):
+        return c2 if (c2 := column(pattern, c, True)) else row(pattern, has_smudge=True) * 100
     else:
-        return row(pattern) * 100
-
+        r = row(pattern)
+        return r2 * 100 if (r2 := row(pattern, r, True)) else column(pattern, has_smudge=True)
 
 
 
